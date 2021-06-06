@@ -60,7 +60,7 @@ class Applicant(models.Model):
 
 
     def __str__(self):
-        return self.applicant_name
+        return self.name
 
 class Course(models.Model):
     title = models.CharField(max_length=20)
