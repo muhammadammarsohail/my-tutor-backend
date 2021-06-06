@@ -1,1 +1,1 @@
-web: gunicorn tutor.wsgi
+web: gunicorn myTutor.wsgi:application --log-file -
