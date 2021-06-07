@@ -75,7 +75,7 @@ class Class(models.Model):
     whatsappGroupLink = models.IntegerField(null=True, blank=True)
     zoomLink = models.IntegerField(null=True, blank=True)
     monthlyFees = models.IntegerField(default=0)
-    joiningDate = models.DateField()
+    startingDate = models.DateField()
     hoursPerMonth = models.IntegerField()
     sessionsPerMonth = models.IntegerField()
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -83,6 +83,7 @@ class Class(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     time = models.TimeField()
     language = models.CharField(max_length=20)
+    days = models.CharField(max_length=30)
     def __str__(self):
         return self.class_title
 
