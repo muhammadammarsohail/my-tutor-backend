@@ -15,6 +15,7 @@ from rest_framework import status
 def index(request):
     return HttpResponse("Hello, world. You're at the tutor index.")
 
+# applicant view
 class ApplicantView(APIView):
     def post(request):
         serializer = ApplicantSerializer(data=request.data)
