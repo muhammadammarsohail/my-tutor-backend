@@ -1,3 +1,4 @@
+from tutor.models import Applicant
 from django.db import models
 from django.shortcuts import render
 
@@ -16,22 +17,38 @@ from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 
 from django.forms.models import model_to_dict
 
-
-
+from tutor import serializers
 
 def index(request):
     return HttpResponse("Hello, world. You're at the tutor index.")
 
 # applicant view
 class ApplicantView(APIView):
-    def post(request):
+    def post(self, request):
         serializer = ApplicantSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# class Hire(APIView):
+    def get(self, request, pk):
+        applicants = Applicant.objects.filter(id=pk)
+        serializer = ApplicantSerializer(applicants, many=True)
+        return Response(serializer.data)
+
+class AllApplicantView(APIView):
+    # def post(self, request):
+    #     serializer = ApplicantSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        applicants = Applicant.objects.all()        
+        serializer = ApplicantSerializer(applicants, many=True)
+        return Response(serializer.data)
+
 
 @api_view(['Get',])
 # @renderer_classes(('TemplateHTMLRenderer, JSONRenderer'))
@@ -48,4 +65,4 @@ def hire(request, pk):
 def deleteHired(request, applicant):
     applicant.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
-    
+
