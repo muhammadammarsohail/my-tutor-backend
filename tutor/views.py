@@ -4,8 +4,8 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import HttpResponse, Http404
 from django.views import generic
-from .serializers import ApplicantSerializer, TeacherSerializer
-from .models import Applicant, Teacher
+from .serializers import ApplicantSerializer, TeacherSerializer, TrainingClassSerializer
+from .models import Applicant, Class, Teacher
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -48,3 +48,8 @@ def deleteHired(request, applicant):
     applicant.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
     
+class TrainingClassesView(APIView):
+    def get(self, request):
+        classes = Class.objects.filter(is_training=True)
+        serializer = TrainingClassSerializer(classes, many=True)
+        return Response(serializer.data)
