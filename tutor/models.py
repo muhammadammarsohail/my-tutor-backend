@@ -22,7 +22,7 @@ class Student(models.Model):
     speaks_english = models.BooleanField()
     # transactionCurrency = 
     def __str__(self):
-        return self.student_name
+        return self.name
     
 
 class Teacher(models.Model):
@@ -31,14 +31,16 @@ class Teacher(models.Model):
     phone = models.CharField(max_length=20)
     email = models.EmailField()
     gender = models.CharField(max_length=10, choices=(('Male', 'Male'),('Female','Female')))
-    dob = models.DateField()
-    transactionMethod = models.CharField(max_length=20, choices=TransactionMethods.choices)
-    is_graduate = models.BooleanField(default=False)
-    is_master = models.BooleanField(default=False)
-    speaks_english = models.BooleanField()
+    # dob = models.DateField()
+    # transactionMethod = models.CharField(max_length=20, choices=TransactionMethods.choices)
+    # is_graduate = models.BooleanField(default=False)
+    education = models.CharField(max_length=50)
     experiencedYears = models.IntegerField(null=True, blank=True)
+    intro = models.CharField(max_length=300)
+
     def __str__(self):
-        return self.teacher_name
+        return self.name
+
 
 class Applicant(models.Model):
     name = models.CharField(max_length=200)
@@ -58,7 +60,6 @@ class Applicant(models.Model):
     intro = models.CharField(max_length=300)
     resume = models.FileField()
 
-
     def __str__(self):
         return self.name
 
@@ -66,7 +67,7 @@ class Course(models.Model):
     title = models.CharField(max_length=20)
     estimatedMonths = models.IntegerField(null=True, blank=True)
     def __str__(self):
-        return self.course_title
+        return self.title
 
     # pass
 
@@ -85,7 +86,7 @@ class Class(models.Model):
     language = models.CharField(max_length=20)
     days = models.CharField(max_length=30)
     def __str__(self):
-        return self.class_title
+        return self.title
 
     # class Teacher(models.Model):
     #     name = models.CharField(max_length=200)
