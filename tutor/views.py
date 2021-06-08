@@ -5,8 +5,8 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import HttpResponse, Http404
 from django.views import generic
-from .serializers import ApplicantSerializer, TeacherSerializer
-from .models import Applicant, Teacher
+from .serializers import ApplicantSerializer, TeacherSerializer, TrainingClassSerializer
+from .models import Applicant, Class, Teacher
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -23,6 +23,8 @@ from django.forms.models import model_to_dict
 def index(request):
     return HttpResponse("Hello, world. You're at the tutor index.")
 
+errorJSON = {'errorType':'No Applicant Found'}
+
 class ApplicantView(APIView):
     def post(self, request):
         serializer = ApplicantSerializer(data=request.data)
@@ -32,9 +34,21 @@ class ApplicantView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, pk):
-        applicants = Applicant.objects.filter(id=pk)
-        serializer = ApplicantSerializer(applicants, many=True)
+        applicants = Applicant.objects.filter(id=pk).first()
+        print(f"type = {type(applicants)}")
+        # if applicants ==:
+        #     return Response(errorJSON, status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = ApplicantSerializer(applicants)
         return Response(serializer.data)
+
+class RegisterApplicantView(APIView):
+    def post(self, request):
+        serializer = ApplicantSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AllApplicantView(APIView):
     def post(self, request):
@@ -45,8 +59,16 @@ class AllApplicantView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
-        applicants = Applicant.objects.all()        
+        applicants = Applicant.objects.all()
+        # if applicants == []:
+        #     return Response(status=status.HTTP_400_BAD_REQUEST)
+        # if len(applicants) < 1:
+        #     serializer =   
+        if len(applicants) < 1:
+            return Response(errorJSON, status=status.HTTP_400_BAD_REQUEST)
         serializer = ApplicantSerializer(applicants, many=True)
+        
+        # print(serializer)
         return Response(serializer.data)
 # class Hire(APIView):
 
@@ -54,6 +76,10 @@ class AllApplicantView(APIView):
 # @renderer_classes(('TemplateHTMLRenderer, JSONRenderer'))
 def hire(request, pk):
     applicant = Applicant.objects.filter(id=pk).first()
+    if applicant == None:
+        return Response(errorJSON, status=status.HTTP_400_BAD_REQUEST)
+        
+
     serializer = TeacherSerializer(data = model_to_dict(applicant))
     if serializer.is_valid():
         serializer.save()
@@ -65,3 +91,9 @@ def hire(request, pk):
 def deleteHired(request, applicant):
     applicant.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class TrainingClassesView(APIView):
+    def get(self, request):
+        classes = Class.objects.filter(is_training=True)
+        serializer = TrainingClassSerializer(classes, many=True)
+        return Response(serializer.data)

@@ -8,6 +8,7 @@ urlpatterns = [
     path('applicant/<int:pk>/', views.ApplicantView.as_view(), name='showApplicants'),
     path('all-applicants/', views.AllApplicantView.as_view(), name='showApplicants'),
 
-    path('regapplicants/', views.ApplicantView.as_view(), name='applicants'),
-    path('hire-applicant/<int:pk>/',views.hire)
+    path('regapplicants/', views.RegisterApplicantView.as_view(), name='applicants'),
+    path('hire-applicant/<int:pk>/',views.hire),
+    path('training-classes/', views.TrainingClassesView.as_view(), name='training')
 ]
