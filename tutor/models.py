@@ -1,3 +1,4 @@
+from os import truncate
 from django.db import models
 from django.db.models.fields import CharField, DateField, EmailField, IntegerField
 # from django_countries.fields import CountryField
@@ -59,7 +60,7 @@ class Applicant(models.Model):
     expectedSalary = models.IntegerField()
     preferredCurrency = models.CharField(max_length=10)
     intro = models.CharField(max_length=300)
-    resume = models.FileField()
+    resume = models.FileField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -78,7 +79,7 @@ class Class(models.Model):
     zoomLink = models.CharField(max_length = 50, null=True, blank=True)
     monthlyDebit = models.IntegerField(default=0)
     monthlyCredit = models.IntegerField(default=0)
-    startingDate = models.DateField()
+    joiningDate = models.DateField()
     hoursPerMonth = models.IntegerField()
     sessionsPerMonth = models.IntegerField()
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -86,8 +87,11 @@ class Class(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     time = models.TimeField()
     language = models.CharField(max_length=20)
+
+
     days = models.CharField(max_length=200)
     is_training = models.BooleanField(default=False)
+
     def __str__(self):
         return self.title
 
