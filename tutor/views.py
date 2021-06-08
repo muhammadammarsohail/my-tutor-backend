@@ -23,7 +23,7 @@ from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from django.forms.models import model_to_dict
 
 
-from tutor import serializers
+# from tutor import serializers
 
 
 def index(request):
